@@ -1,0 +1,20 @@
+.App {
+  text-align: center;
+}
+
+.input-felid {
+  padding: 15px 32px;
+  margin-top: 10px;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid gray;
+}
+.input-felid:hover {
+  border: 1px solid cyan;
+}
+
+.login-box {
+  padding: 50px;
+  margin: auto;
+  text-align: center;
+}

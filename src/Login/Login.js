@@ -1,5 +1,11 @@
 import "./Login.css";
-import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithEmailAndPassword
+} from "firebase/auth";
 import firebaseInitialize from "../Firebase/Firebase.init";
 import { useState } from "react";
 
@@ -9,10 +15,13 @@ const githubProvider = new GithubAuthProvider();
 
 
 const Login = () => {
-  const [user, setUser] = useState({});
-
-
   const auth = getAuth();
+  const [user, setUser] = useState({});
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
@@ -25,6 +34,9 @@ const Login = () => {
         }
         setUser(userInfo);
       })
+      .catch((error) => {
+        setError(error);
+      });
   }
 
   const handleGithubSignIn = () => {
@@ -40,6 +52,37 @@ const Login = () => {
         setUser(userInfo);
       })
   }
+  const handleEmailChange = e => {
+    setEmail(e.target.value);
+  }
+  const handlePasswordChange = e => {
+
+    if ((e.target.value.length) < 6) {
+      setError('Password Must be at least 6 characters');
+    } else {
+      setPassword(e.target.value);
+      setError('');
+    }
+  }
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        const { email, displayName, photoURL } = result.user;
+        // console.log(user);
+        const userInfo = {
+          name: displayName,
+          email: email,
+          photo: photoURL
+        };
+        setUser(userInfo);
+        setError('');
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  }
   return (
     <div>
       <div className="login-box d-flex align-items-center justify-content-center">
@@ -48,8 +91,10 @@ const Login = () => {
             <h2 className="text-info">Pease Login</h2>
             <p>{user.name}</p>
             <p className="text-danger"></p>
-            <form>
+            <form onSubmit={handleLogin}>
+              <p>{error}</p>
               <input
+                onBlur={handleEmailChange}
                 className="input-felid"
                 type="email"
                 name="email"
@@ -57,6 +102,7 @@ const Login = () => {
               />
               <br />
               <input
+                onBlur={handlePasswordChange}
                 className="input-felid"
                 type="password"
                 name="password"

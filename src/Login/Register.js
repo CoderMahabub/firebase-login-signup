@@ -10,6 +10,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState({});
+  const [error, setError] = useState('');
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -17,11 +18,13 @@ const Register = () => {
   const handlePasswordChange = e => {
 
     if ((e.target.value.length) < 6) {
-      console.error('Hobe Na Bhai');
+      setError('Password Must be at least 6 Characters');
     } else {
       setPassword(e.target.value);
+      setError('');
     }
   }
+
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -37,7 +40,7 @@ const Register = () => {
         setUser(userInfo);
       })
       .catch((error) => {
-        console.log(error.message);
+        setError(error);
       });
   }
 
@@ -49,6 +52,7 @@ const Register = () => {
           <div className="login-box">
             <h2 className="text-info">Please Register</h2>
             <form onSubmit={handleRegister}>
+              <p>{error}</p>
               <input
                 onBlur={handleEmailChange}
                 className="input-felid"

@@ -4,7 +4,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   GithubAuthProvider,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import firebaseInitialize from "../Firebase/Firebase.init";
 import { useState } from "react";
@@ -83,16 +84,23 @@ const Login = () => {
         setError(error.message);
       });
   }
+  const handleResetPassword = () => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setError('Password Reset Email Sent');
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  }
   return (
     <div>
       <div className="login-box d-flex align-items-center justify-content-center">
         <div className="login">
           <div className="login-box">
-            <h2 className="text-info">Pease Login</h2>
-            <p>{user.name}</p>
-            <p className="text-danger"></p>
+            <h2 className="text-info"><u>PLEASE LOGIN</u></h2>
             <form onSubmit={handleLogin}>
-              <p>{error}</p>
+              <p className="text-danger">{error}</p>
               <input
                 onBlur={handleEmailChange}
                 className="input-felid"
@@ -109,23 +117,21 @@ const Login = () => {
                 placeholder="Enter your Password"
               />
               <input
-                className="mt-3 w-50 btn btn-success m-auto"
+                className="mt-3 w-50 btn btn-info m-auto text-light fw-bold"
                 type="submit"
                 value="Login"
               />
             </form>
           </div>
-          <button onClick={handleGoogleSignIn} className="me-2">
-            Login with Google
+          <button onClick={handleGoogleSignIn} className="me-2 btn btn-sm btn-warning fw-bold text-light bg-dark rounded">
+            Login with <i className="fab fa-google text-danger"></i>
           </button>
-          <button onClick={handleGithubSignIn} className="me-2">
-            Login with Github
+          <button onClick={handleGithubSignIn} className="me-2 btn btn-sm btn-warning fw-bold text-light bg-dark rounded">
+            Login with <i className="fab fa-github-square text-danger"></i>
           </button>
-
-          <button className="mt-2">
-            Reset Password
+          <button onClick={handleResetPassword} className="btn btn-sm btn-warning fw-bold text-light bg-dark rounded">
+            Reset Password <i class="fas fa-unlock-alt text-danger"></i>
           </button>
-
         </div>
       </div>
     </div>

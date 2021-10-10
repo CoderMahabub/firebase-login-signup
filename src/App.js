@@ -17,17 +17,17 @@ function App() {
         <div className="login-area col-md-6">
           {toggle ? <Login></Login> : <Register></Register>}
 
-          {toggle ? <p onClick={() => setToggle(false)} className="text-primary ">
-            are you new please register
-          </p> :
-            <p onClick={() => setToggle(true)} className="text-primary ">
-              already have an account ?
-            </p>}
+          {toggle ? <button onClick={() => setToggle(false)} className="btn btn-success fw-bold text-light">
+            Register Now ?
+          </button> :
+            <button onClick={() => setToggle(true)} className="btn btn-success fw-bold text-light">
+              Already Registered ?
+            </button>}
         </div>
         <div className="col-md-6">
           <div className="img">
             <img
-              className="image-fluid w-100"
+              className="image-fluid w-100 img-fluid"
               src={logo}
               alt=""
             />

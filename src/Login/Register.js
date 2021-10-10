@@ -1,5 +1,5 @@
 import "./Login.css";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import firebaseInitialize from "../Firebase/Firebase.init";
 import { useState } from "react";
 
@@ -25,7 +25,6 @@ const Register = () => {
     }
   }
 
-
   const handleRegister = (e) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
@@ -38,21 +37,27 @@ const Register = () => {
           photo: photoURL
         }
         setUser(userInfo);
+        verifyEmail(email);
       })
       .catch((error) => {
         setError(error);
       });
   }
-
+  const verifyEmail = () => {
+    sendEmailVerification(auth.currentUser)
+      .then(() => {
+        // Email verification sent!
+        // ...
+      });
+  }
   return (
     <div>
-      <h1>{user.email}</h1>
       <div className="login-box d-flex align-items-center justify-content-center">
         <div className="login">
           <div className="login-box">
-            <h2 className="text-info">Please Register</h2>
+            <h2 className="text-info"><u>PLEASE REGISTER</u></h2>
             <form onSubmit={handleRegister}>
-              <p>{error}</p>
+              <p className="text-danger">{error}</p>
               <input
                 onBlur={handleEmailChange}
                 className="input-felid"
@@ -71,7 +76,7 @@ const Register = () => {
                 required
               />
               <button
-                className="mt-3 w-50 btn btn-success m-auto"
+                className="mt-3 w-50 btn btn-info m-auto text-light fw-bold"
                 type="submit"
                 value="Register"
               >Register</button>
